@@ -5,6 +5,7 @@ use reqwest::{Client, Response};
 use serde::de::DeserializeOwned;
 use swap::{SwapInstructionsResponse, SwapInstructionsResponseInternal, SwapRequest, SwapResponse};
 use thiserror::Error;
+use tracing::info;
 
 pub mod quote;
 pub mod route_plan_with_metadata;
@@ -53,15 +54,24 @@ impl JupiterSwapApiClient {
     }
 
     pub async fn quote(&self, quote_request: &QuoteRequest) -> Result<QuoteResponse, ClientError> {
+        let client = Client::new();
+
         let url = format!("{}/quote", self.base_path);
         let extra_args = quote_request.quote_args.clone();
         let internal_quote_request = InternalQuoteRequest::from(quote_request.clone());
-        let response = Client::new()
+
+        let request = client
             .get(url)
             .query(&internal_quote_request)
             .query(&extra_args)
-            .send()
-            .await?;
+            .build()?; // 这里不会发送请求
+
+        // 打印完整 URL
+        info!("Jupiter quote request url: {}", request.url());
+
+        // 发送请求
+        let response = client.execute(request).await?;
+
         check_status_code_and_deserialize(response).await
     }
 
