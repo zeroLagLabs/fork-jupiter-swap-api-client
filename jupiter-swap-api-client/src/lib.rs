@@ -50,10 +50,10 @@ async fn check_status_code_and_deserialize<T: DeserializeOwned>(
 }
 
 impl JupiterSwapApiClient {
-    pub fn new(base_path: String) -> Self {
+    pub fn new(base_path: String, client: Client) -> Self {
         Self {
             base_path,
-            client: Client::new(),
+            client,
         }
     }
 
