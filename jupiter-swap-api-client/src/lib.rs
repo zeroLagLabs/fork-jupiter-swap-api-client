@@ -69,7 +69,7 @@ impl JupiterSwapApiClient {
             .build()?; // 这里不会发送请求
 
         // 打印完整 URL
-        //info!("Jupiter quote request url: {}", request.url());
+        info!("Jupiter quote request url: {}", request.url());
 
         // 发送请求
         let response = self.client.execute(request).await?;
