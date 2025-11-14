@@ -73,7 +73,7 @@ impl JupiterSwapApiClient {
         // 发送请求
         let response = self.client.execute(request).await?;
 
-        info!("Jupiter quote response: {}, request url: {}", response.status(), request_url);
+        //info!("Jupiter quote response: {}, request url: {}", response.status(), request_url);
 
         check_status_code_and_deserialize(response).await
     }
